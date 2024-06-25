@@ -1,4 +1,6 @@
-# Web-analytics
+# eCommerce Electronics Store Analytics - PostgreSQL
+eCommerce events history in electronics store dataset link: https://www.kaggle.com/datasets/mkechinov/ecommerce-events-history-in-electronics-store
+
 ---------------------------- DATA CLEANING ----------------------------------------
 
 -- Create table webstore
