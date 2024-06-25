@@ -120,13 +120,13 @@ eCommerce events history in electronics store dataset link: https://www.kaggle.c
 -- Cart abandonment rate
 
     SELECT 100.0 * (COUNT(*) FILTER (WHERE action = 'cart')::DECIMAL -
-	         COUNT(*) FILTER (WHERE action IN ('cart', 'view') AND lead = 'purchase'))/
+	   COUNT(*) FILTER (WHERE action IN ('cart', 'view') AND lead = 'purchase'))/
            COUNT(*) FILTER(WHERE action = 'cart') AS cart_abandonment_rate
     FROM (
-	         SELECT user_session, user_id, action, 
-                 LEAD(action)OVER(PARTITION BY user_session, user_id ORDER BY date, time), 
-                 date, time
-	         FROM webstore
+	   SELECT user_session, user_id, action, 
+                  LEAD(action)OVER(PARTITION BY user_session, user_id ORDER BY date, time), 
+                  date, time
+	   FROM webstore
 	  ) AS a;
    
 -- Day in week views
@@ -164,3 +164,37 @@ eCommerce events history in electronics store dataset link: https://www.kaggle.c
           GROUP BY day, time
 	  ) AS a
     GROUP BY day, time;
+
+-- Sales by Category
+
+	WITH a AS (SELECT category, SUM(price)
+	FROM webstore
+	WHERE action = 'purchase'
+	GROUP BY category)
+	
+	SELECT COALESCE(UPPER(category), 'NON-CATEGORIZED') AS category, sum
+	FROM a;
+-- Sales by Brand per Category
+
+	WITH a AS (
+ 	SELECT category, brand, SUM(price)
+	FROM webstore
+	WHERE action = 'purchase'
+	GROUP BY category, brand
+	ORDER BY category
+ 	),
+
+	b AS (
+ 	SELECT category, brand, sum, DENSE_RANK()OVER(PARTITION BY category ORDER BY sum DESC)
+	FROM a
+ 	),
+
+	c AS (
+ 	SELECT category, brand, sum
+	FROM b
+	WHERE dense_rank <= 5
+ 	)
+
+	SELECT COALESCE(UPPER(category), 'NON-CATEGORIZED') AS category, 
+	       COALESCE(brand, 'OFF BRAND') AS brand, sum AS sales
+	FROM c
