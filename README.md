@@ -1,5 +1,7 @@
 # eCommerce Electronics Store Analytics - PostgreSQL
-eCommerce events history in electronics store dataset link: https://www.kaggle.com/datasets/mkechinov/ecommerce-events-history-in-electronics-store
+-- eCommerce events history in electronics store dataset link: https://www.kaggle.com/datasets/mkechinov/ecommerce-events-history-in-electronics-store
+
+-- Tableau Dashboard: https://public.tableau.com/app/profile/huong6399/viz/Website-ViewsandPurchasesReport/Dashboard1
 
 ---------------------------- DATA CLEANING ----------------------------------------
 
